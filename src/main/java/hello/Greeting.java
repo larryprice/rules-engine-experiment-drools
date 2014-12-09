@@ -1,13 +1,16 @@
 package hello;
 
 public class Greeting {
-
     private final long id;
-    private final String content;
+    private final String name;
+    public final String language;
+    private String content;
 
-    public Greeting(long id, String content) {
+    public Greeting(long id, String name, String language) {
         this.id = id;
-        this.content = content;
+        this.name = name;
+        this.content = "Hello, " + name + ".";
+        this.language = language;
     }
 
     public long getId() {
@@ -16,5 +19,9 @@ public class Greeting {
 
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String newGreeting) {
+        this.content = newGreeting + ", " + name + ".";
     }
 }

@@ -1,0 +1,30 @@
+package hello;
+ 
+import hello.Greeting;
+ 
+rule "espanol"
+    when
+        m : Greeting( language == "spanish" && !content.contains("Hola") )
+    then
+        System.out.println( m.getContent() );
+        m.setContent( "Hola" );
+        update( m );
+end
+
+rule "francois"
+  when
+      m : Greeting( language == "french" && !content.contains("Bonjour") )
+  then
+      System.out.println( m.getContent() );
+      m.setContent( "Bonjour" );
+      update( m );
+end
+
+rule "nihongo"
+  when
+      m : Greeting( language == "japanese" && !content.contains("Ohayo") )
+  then
+      System.out.println( m.getContent() );
+      m.setContent( "Ohayo" );
+      update( m );
+end
