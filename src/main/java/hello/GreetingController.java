@@ -27,14 +27,12 @@ public class GreetingController {
 
         KieServices ks = KieServices.Factory.get();
         UrlResource urlResource = (UrlResource) ks.getResources().newUrlResource(url);
-        urlResource.setBasicAuthentication("enabled");
-        urlResource.setUsername("admin");
-        urlResource.setPassword("admin");
         
         try {
             InputStream is = urlResource.getInputStream();
             KieModule kModule = ks.getRepository().addKieModule(ks.getResources().newInputStreamResource(is));
-            kieContainer = ks.newKieContainer(kModule.getReleaseId());
+            System.out.println(kModule.getReleaseId());
+            kieContainer = ks.newKieContainer(new ReleaseIdImpl("com.sep.test", "myProject", "LATEST"));
 
             scanner = ks.newKieScanner(kieContainer);
         } catch(Exception e) {
@@ -48,8 +46,6 @@ public class GreetingController {
 
         StatelessKieSession kieSession = kieContainer.newStatelessKieSession();
         kieSession.execute(g);
-        // kieSession.fireAllRules();
-        // kieSession.dispose();
     }
 
     @RequestMapping("/greeting")
