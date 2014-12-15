@@ -5,24 +5,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.drools.compiler.kproject.ReleaseIdImpl;
+import org.drools.core.io.impl.UrlResource;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.StatelessKieSession;
+import org.kie.api.builder.KieScanner;
+import org.kie.api.builder.KieModule;
+import org.kie.internal.io.ResourceFactory;
+
+import java.io.InputStream;
 
 @RestController
 public class GreetingController {
+    private KieScanner scanner = null;
     private KieContainer kieContainer = null;
 
     public GreetingController() {
+        String url = "http://localhost:8088/workbench/maven2/com/sep/test/myProject/1.0/myProject-1.0.jar";
+
         KieServices ks = KieServices.Factory.get();
-        kieContainer = ks.getKieClasspathContainer();
+        UrlResource urlResource = (UrlResource) ks.getResources().newUrlResource(url);
+        urlResource.setBasicAuthentication("enabled");
+        urlResource.setUsername("admin");
+        urlResource.setPassword("admin");
+        
+        try {
+            InputStream is = urlResource.getInputStream();
+            KieModule kModule = ks.getRepository().addKieModule(ks.getResources().newInputStreamResource(is));
+            kieContainer = ks.newKieContainer(kModule.getReleaseId());
+
+            scanner = ks.newKieScanner(kieContainer);
+        } catch(Exception e) {
+            System.out.println("Exception thrown while constructing InputStream");
+            System.out.println(e.getMessage());
+        }
     }
 
     public void runRules(Greeting g) {
-        KieSession kieSession = kieContainer.newKieSession("ksession-rules");
-        kieSession.insert(g);
-        kieSession.fireAllRules();
-        kieSession.dispose();
+        scanner.scanNow(); // update resource
+
+        StatelessKieSession kieSession = kieContainer.newStatelessKieSession();
+        kieSession.execute(g);
+        // kieSession.fireAllRules();
+        // kieSession.dispose();
     }
 
     @RequestMapping("/greeting")
