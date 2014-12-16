@@ -16,6 +16,7 @@ import org.kie.api.builder.KieModule;
 import org.kie.internal.io.ResourceFactory;
 
 import java.io.InputStream;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class GreetingController {
@@ -27,7 +28,7 @@ public class GreetingController {
 
         KieServices ks = KieServices.Factory.get();
         UrlResource urlResource = (UrlResource) ks.getResources().newUrlResource(url);
-        
+
         try {
             InputStream is = urlResource.getInputStream();
             KieModule kModule = ks.getRepository().addKieModule(ks.getResources().newInputStreamResource(is));
@@ -49,7 +50,11 @@ public class GreetingController {
     }
 
     @RequestMapping("/greeting")
-    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name, @RequestParam(value="language", defaultValue="english") String language) {
+    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name,
+                             @RequestParam(value="language", defaultValue="english") String language,
+                             HttpServletRequest request) {
+        System.out.println(request.getRequestURL().toString());
+
         Greeting g = new Greeting(1, name, language);
         runRules(g);
 
