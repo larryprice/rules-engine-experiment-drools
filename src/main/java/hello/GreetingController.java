@@ -23,40 +23,47 @@ public class GreetingController {
     private KieScanner scanner = null;
     private KieContainer kieContainer = null;
 
-    public GreetingController() {
-        String url = "http://localhost:8088/workbench/maven2/com/sep/test/myProject/1.0/myProject-1.0.jar";
+    private void loadKie(String urlBase) {
+        if (kieContainer == null) {
+            String url = urlBase + "/workbench/maven2/com/sep/test/myProject/1.0/myProject-1.0.jar";
 
-        KieServices ks = KieServices.Factory.get();
-        UrlResource urlResource = (UrlResource) ks.getResources().newUrlResource(url);
+            KieServices ks = KieServices.Factory.get();
+            UrlResource urlResource = (UrlResource) ks.getResources().newUrlResource(url);
 
-        try {
-            InputStream is = urlResource.getInputStream();
-            KieModule kModule = ks.getRepository().addKieModule(ks.getResources().newInputStreamResource(is));
-            System.out.println(kModule.getReleaseId());
-            kieContainer = ks.newKieContainer(new ReleaseIdImpl("com.sep.test", "myProject", "LATEST"));
+            try {
+                InputStream is = urlResource.getInputStream();
+                KieModule kModule = ks.getRepository().addKieModule(ks.getResources().newInputStreamResource(is));
+                System.out.println(kModule.getReleaseId());
+                kieContainer = ks.newKieContainer(new ReleaseIdImpl("com.sep.test", "myProject", "LATEST"));
 
-            scanner = ks.newKieScanner(kieContainer);
-        } catch(Exception e) {
-            System.out.println("Exception thrown while constructing InputStream");
-            System.out.println(e.getMessage());
+                scanner = ks.newKieScanner(kieContainer);
+            } catch(Exception e) {
+                System.out.println("Exception thrown while constructing InputStream");
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    public void runRules(Greeting g) {
+    private void runRules(Greeting g, String baseUrl) {
+        loadKie(baseUrl);
+
         scanner.scanNow(); // update resource
 
         StatelessKieSession kieSession = kieContainer.newStatelessKieSession();
         kieSession.execute(g);
     }
 
+    private String getBaseURL(HttpServletRequest request) {
+        String url = request.getRequestURL().toString();
+        return url.substring(0, url.length() - request.getRequestURI().length());
+    }
+
     @RequestMapping("/greeting")
     public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name,
                              @RequestParam(value="language", defaultValue="english") String language,
                              HttpServletRequest request) {
-        System.out.println(request.getRequestURL().toString());
-
         Greeting g = new Greeting(1, name, language);
-        runRules(g);
+        runRules(g, getBaseURL(request));
 
         return g;
     }

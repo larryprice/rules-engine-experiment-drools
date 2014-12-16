@@ -52,7 +52,7 @@
 <script type="text/javascript">
   function fetchGreeting() {
     return $.ajax({
-      url: "/gs-rest-service-0.1.0/greeting",
+      url: "greeting",
       method: "GET",
       data: {
         name: $("#name").val(),
