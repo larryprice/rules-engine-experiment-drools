@@ -25,7 +25,7 @@ public class GreetingController {
 
     private void loadKie(String urlBase) {
         if (kieContainer == null) {
-            String url = urlBase + "/workbench/maven2/com/sep/test/myProject/1.0/myProject-1.0.jar";
+            String url = urlBase + "/workbench/maven2/com/sep/test/greeting/1.0/greeting-1.0.jar";
 
             KieServices ks = KieServices.Factory.get();
             UrlResource urlResource = (UrlResource) ks.getResources().newUrlResource(url);
@@ -34,7 +34,7 @@ public class GreetingController {
                 InputStream is = urlResource.getInputStream();
                 KieModule kModule = ks.getRepository().addKieModule(ks.getResources().newInputStreamResource(is));
                 System.out.println(kModule.getReleaseId());
-                kieContainer = ks.newKieContainer(new ReleaseIdImpl("com.sep.test", "myProject", "LATEST"));
+                kieContainer = ks.newKieContainer(new ReleaseIdImpl("com.sep.test", "greeting", "LATEST"));
 
                 scanner = ks.newKieScanner(kieContainer);
             } catch(Exception e) {
