@@ -139,7 +139,7 @@
     $("#user-list").hide();
     $("#commission-info").hide();
     return $.ajax({
-      url: "sales/data",
+      url: "sales",
       method: "GET",
       data: {
         role: $('input[name="roleRadios"]:checked').val(),

@@ -58,7 +58,7 @@ public class GreetingController {
         return url.substring(0, url.length() - request.getRequestURI().length());
     }
 
-    @RequestMapping("/greeting")
+    @RequestMapping("/greeting/data")
     public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name,
                              @RequestParam(value="language", defaultValue="english") String language,
                              HttpServletRequest request) {

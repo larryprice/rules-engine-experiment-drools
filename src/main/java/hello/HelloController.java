@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class HelloController {
-  @RequestMapping(value="/", method=RequestMethod.GET)
+  @RequestMapping(value="/greeting", method=RequestMethod.GET)
   public String index(Model model) {
     return "hello";
   }
   
-  @RequestMapping(value="/sales", method=RequestMethod.GET)
+  @RequestMapping(value="/", method=RequestMethod.GET)
   public String sales(Model model) {
     return "sales";
   }

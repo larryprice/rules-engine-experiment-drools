@@ -57,7 +57,7 @@ public class SalesController {
         return url.substring(0, url.length() - request.getRequestURI().length());
     }
 
-    @RequestMapping("/sales/data")
+    @RequestMapping("/sales")
     public Sales salesData(@RequestParam(value="role", defaultValue="producer") String role,
                              @RequestParam(value="channel", defaultValue="retail") String channel,
                              @RequestParam(value="status", defaultValue="true") String isActive,
