@@ -80,7 +80,7 @@
           <groupId>org.drools</groupId>
           <artifactId>drools-templates</artifactId>
           <version>6.1.0.Final</version>
-           <scope>provided</scope>
+           <!-- <scope>provided</scope> -->
         </dependency>
 
         <dependency>
@@ -108,7 +108,7 @@
           <groupId>org.drools</groupId>
           <artifactId>drools-decisiontables</artifactId>
           <version>6.1.0.Final</version>
-           <scope>provided</scope>
+           <!-- <scope>provided</scope> -->
         </dependency>
 
         <dependency>
