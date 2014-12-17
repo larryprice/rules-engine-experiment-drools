@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HelloController {
   @RequestMapping(value="/", method=RequestMethod.GET)
   public String index(Model model) {
-    // renders /WEB-INF/views/hello.jsp
     return "hello";
+  }
+  
+  @RequestMapping(value="/sales", method=RequestMethod.GET)
+  public String sales(Model model) {
+    return "sales";
   }
 }
